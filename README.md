@@ -1,0 +1,2 @@
+# SmallIdeal
+random
