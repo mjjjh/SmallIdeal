@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: "Lato", sans-serif;
+        }
+
+        .side-menu {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+        .side-menu a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .side-menu a:hover {
+            color: #f1f1f1;
+        }
+
+        .side-menu .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            display: flex;
+            width: 80%;
+            justify-content: space-around;
+        }
+
+        .side-menu.sidebar-footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 10px;
+            background: #111;
+        }
+
+        .sidebar-footer .closebtn {
+            width: 100%;
+            padding: 10px;
+            font-size: 20px;
+            color: white;
+            background: #444;
+            border: none;
+            cursor: pointer;
+        }
+
+        .sidebar-footer .closebtn:hover {
+            background-color: #555;
+        }
+
+        .openbtn {
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #111;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+        }
+
+        .openbtn:hover {
+            background-color: #444;
+        }
+
+        [id^=myWindow] {
+            width: 300px;
+            height: auto;
+            padding: 10px;
+            position: absolute;
+            background: #f3f3f3;
+            border: 1px solid #ddd;
+            top: 50px;
+            left: 250px;
+            cursor: move;
+            display: none;
+        }
+
+        #titleBar {
+            padding: 5px;
+            background: #ccc;
+            cursor: move;
+        }
+
+        .top-button {
+            background-color: #cccccc;
+        }
+
+        .input-group {
+            margin-bottom: 10px;
+        }
+
+        .input-group label,
+        .input-group input {
+            display: block;
+        }
+
+        .input-group input {
+            width: calc(100% - 20px);
+            padding: 5px;
+        }
+
+        /* 计算机 */
+        /* 计算器的整体样式 */
+        #myWindow4 .calculator {
+            margin: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #myWindow4 .display {
+            width: 96%;
+            height: 40px;
+            margin-bottom: 10px;
+            text-align: right;
+            font-size: 18px;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        #myWindow4 .buttons button {
+            width: 20%;
+            padding: 10px;
+            margin: 2px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f2f2f2;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #myWindow4 .buttons button:hover {
+            background-color: #cccccc;
+        }
+
+        @media (max-width: 400px) {
+            #myWindow4 .buttons button {
+                width: 46%;
+                margin: 2%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <button class="openbtn" onclick="openNav()">☰ Open Side Menu</button>
+
+
+    <div id="mySideMenu" class="side-menu">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><span>Menu</span><span> &times;</span></a>
+        <a href="#" onclick="showWindow(1)">频率转换</a>
+        <a href="#" onclick="showWindow(2)">进制转换</a>
+        <a href="#" onclick="showWindow(3)">Bit计算</a>
+        <a href="#" onclick="showWindow(4)">计算机</a>
+        <a href="#" onclick="showWindow(5)">ADC计算</a>
+        <div class="sidebar-footer">
+            <a href="javascript:void(0)" class="closeallmodule" onclick="closeAllmodule()">Close All</a>
+        </div>
+    </div>
+    <!-- 组件模块 -->
+    <div class="module">
+        <!-- 频率转换模块 -->
+        <div id="myWindow1" class="modu">
+            <div id="titleBar">
+                <span style="float:right;cursor:pointer" onclick="closeWindow(1)">&times;</span>
+                <button class="top-button" onclick="bringToFront(this)">置顶</button>
+            </div>
+            <!-- Your draggable window content here -->
+            <div id="titleBar">Calculate Omega</div>
+            <!-- Content of the window -->
+
+            <div class="input-group">
+                <label for="startFreq">Start Frequency (Hz):</label>
+                <input type="number" id="startFreq" placeholder="Enter start frequency">
+
+            </div>
+
+            <div class="input-group">
+                <label for="endFreq">End Frequency (Hz): </label>
+                <input type="number" id="endFreq" placeholder="Enter end frequency">
+
+            </div>
+
+            <div class="input-group">
+                <label for="step">Step (Hz):</label>
+                <input type="number" id="step" placeholder="Enter step">
+            </div>
+
+            <button onclick="calculateOmega()">Calculate ω</button>
+
+            <div id="results"></div>
+        </div>
+
+        <!-- 进制转换模块 -->
+        <div id="myWindow2" class="modu">
+            <div id="titleBar">
+                <span style="float:right;cursor:pointer" onclick="closeWindow(2)">&times;</span>
+                <button class="top-button" onclick="bringToFront(this)">置顶</button>
+
+            </div>
+            <!-- Your draggable window content here -->
+            <div id="titleBar">Conversion</div>
+            <!-- Content of the window -->
+
+            <div class="input-group">
+                <label for="numberInput">Enter your number:</label>
+                <input type="text" id="numberInput" placeholder="Enter number">
+
+            </div>
+
+            <div class="input-group">
+                <label for="inputBase">Input Base:</label>
+                <select id="inputBase">
+                    <option value="2">Binary (2)</option>
+                    <option value="8">Octal (8)</option>
+                    <option value="10" selected>Decimal (10)</option>
+                    <option value="16">Hexadecimal (16)</option>
+                </select>
+
+            </div>
+
+            <div class="input-group">
+                <label for="outputBase">Output Base:</label>
+                <select id="outputBase">
+                    <option value="2">Binary (2)</option>
+                    <option value="8">Octal (8)</option>
+                    <option value="10">Decimal (10)</option>
+                    <option value="16" selected>Hexadecimal (16)</option>
+                </select>
+            </div>
+
+            <button onclick="convertNumber()">Convert</button>
+
+            <p id="result"></p>
+        </div>
+
+
+
+        <!-- 数据转换模块 -->
+        <div id="myWindow3" class="modu">
+            <div id="titleBar">
+                <span>数据转换</span>
+                <span style="float:right;cursor:pointer" onclick="closeWindow(3)">&times;</span>
+                <button class="top-button" onclick="bringToFront(this)">置顶</button>
+
+            </div>
+            <div class="input-group">
+                <label for="dataValue">数值:</label>
+                <input type="number" id="dataValue" placeholder="输入数值">
+            </div>
+            <div class="input-group">
+                <label for="fromUnit">当前单位:</label>
+                <select id="fromUnit">
+                    <option value="bit">位 (bit)</option>
+                    <option value="Byte">字节 (Byte)</option>
+                    <option value="KB">千字节 (KB)</option>
+                    <option value="MB">兆字节 (MB)</option>
+                    <option value="GB">吉字节 (GB)</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="toUnit">目标单位:</label>
+                <select id="toUnit">
+                    <option value="bit">位 (bit)</option>
+                    <option value="Byte">字节 (Byte)</option>
+                    <option value="KB">千字节 (KB)</option>
+                    <option value="MB">兆字节 (MB)</option>
+                    <option value="GB">吉字节 (GB)</option>
+                </select>
+            </div>
+            <button onclick="convertData()">转换</button>
+            <p id="conversionResult"></p>
+            <!-- 2的幂次方和对数功能，带单位选择 -->
+            <div class="input-group">
+                <label for="twoPowerInput">数值:</label>
+                <input type="number" id="twoPowerInput" placeholder="输入数值">
+            </div>
+
+            <div class="input-group">
+                <label for="twoPowerUnit">单位:</label>
+                <select id="twoPowerUnit">
+                    <option value="none">无单位</option>
+                    <option value="bit">位 (bit)</option>
+                    <option value="byte">字节 (Byte)</option>
+                    <option value="kb">千字节 (KB)</option>
+                    <option value="mb">兆字节 (MB)</option>
+                    <option value="gb">吉字节 (GB)</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <input type="radio" id="power" name="twoPowerOperation" value="power" checked>
+                <label for="power">计算2的幂次方</label><br>
+                <input type="radio" id="log" name="twoPowerOperation" value="log">
+                <label for="log">计算2的几次方</label>
+                <input type="radio" id="log2" name="twoPowerOperation" value="log2">
+                <label for="log2">地址线</label>
+            </div>
+
+            <button onclick="performTwoPowerOperation()">计算</button>
+            <p id="twoPowerResult"></p>
+        </div>
+
+
+        <!-- 计算机模块 -->
+        <div id="myWindow4" class="modu">
+            <div id="titleBar">
+                <span>计算机</span>
+                <span style="float:right;cursor:pointer" onclick="closeWindow(4)">&times;</span>
+                <button class="top-button" onclick="bringToFront(this)">置顶</button>
+
+            </div>
+            <div class="calculator">
+                <input type="text" id="display" class="display" disabled>
+                <div class="buttons">
+                    <!-- 计算器按钮 -->
+                    <button onclick="clearDisplay()">C</button>
+                    <button onclick="appendDisplay('1')">1</button>
+                    <button onclick="appendDisplay('2')">2</button>
+                    <button onclick="appendDisplay('3')">3</button>
+                    <button onclick="calculate('/')">/</button>
+                    <button onclick="appendDisplay('4')">4</button>
+                    <button onclick="appendDisplay('5')">5</button>
+                    <button onclick="appendDisplay('6')">6</button>
+                    <button onclick="calculate('*')">*</button>
+                    <button onclick="appendDisplay('7')">7</button>
+                    <button onclick="appendDisplay('8')">8</button>
+                    <button onclick="appendDisplay('9')">9</button>
+                    <button onclick="calculate('-')">-</button>
+                    <button onclick="appendDisplay('0')">0</button>
+                    <button onclick="appendPi()">π</button>
+                    <button onclick="calculate('.')">.</button>
+                    <button onclick="calculate('+')">+</button>
+                    <button onclick="calculate('sqrt')">√</button>
+                    <button onclick="appendDisplay('^')">^</button>
+                    <button onclick="calculate('sin')">sin</button>
+                    <button onclick="calculate('cos')">cos</button>
+                    <button onclick="calculate('tan')">tan</button>
+                    <button onclick="calculate('=')">=</button>
+                </div>
+            </div>
+
+        </div>
+        <!-- ADC计算模块 -->
+        <div id="myWindow5" class="modu">
+            <div id="titleBar">
+                <span style="float:right;cursor:pointer" onclick="closeWindow(5)">&times;</span>
+                <button class="top-button" onclick="bringToFront(this)">置顶</button>
+            </div>
+            <!-- Your draggable window content here -->
+            <div id="titleBar">ADC Calculator</div>
+            <!-- Content of the window -->
+
+            <div class="input-group">
+                <label for="vref">Vref (Reference Voltage):</label>
+                <input type="number" id="vref" placeholder="Enter Vref">
+            </div>
+
+            <div class="input-group">
+                <label for="bit">Number of Bits:</label>
+                <input type="number" id="bit" placeholder="Enter number of bits">
+            </div>
+
+            <div class="input-group">
+                <label for="adcValue">ADC Value:</label>
+                <input type="number" id="adcValue" placeholder="Enter ADC value">
+            </div>
+
+            <button onclick="calculateOutputVoltage()">Calculate Output Voltage</button>
+
+            <div id="outputVoltage"></div>
+        </div>
+
+        <!-- 其他模块待定
+     <div id="myWindow*"> -->
+        
+    </div> 
+
+</body>
+
+
+<!-- 菜单显示主体 -->
+<script>
+    // 模块数量
+    const ModuleNum = 5;
+
+    // Side menu functions
+    function openNav() {
+        document.getElementById("mySideMenu").style.width = "250px";
+    }
+
+    function closeNav() {
+        document.getElementById("mySideMenu").style.width = "0px";
+    }
+
+    // Draggable box functions
+    function showWindow(i) {
+        document.getElementById(`myWindow${i}`).style.display = "block";
+        // Initialize draggable functionality here if it's not already initialized
+    }
+
+    function closeWindow(i) {
+        document.getElementById(`myWindow${i}`).style.display = "none";
+    }
+
+    // Draggable functionality (You should integrate your draggable code here)
+    // Make the DIV element draggable:
+    for (let i = 1; i <= ModuleNum; i++)
+        dragElement(document.getElementById(`myWindow${i}`));
+
+    function dragElement(elmnt) {
+
+        var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+
+        elmnt.onmousedown = dragMouseDown;
+
+        function dragMouseDown(e) {
+            // Ignore mousedown event on input elements.
+            if (e.target.tagName === "INPUT") {
+                return;
+            }
+            if (e.target.tagName === "SELECT") {
+                return;
+            }
+
+            e = e || window.event;
+            e.preventDefault(); // This may need to be removed or modified
+            // get the mouse cursor position at startup:
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            document.onmouseup = closeDragElement;
+            // call a function whenever the cursor moves:
+            document.onmousemove = elementDrag;
+        }
+
+        function elementDrag(e) {
+            e = e || window.event;
+            e.preventDefault(); // This may need to be removed or modified
+            // calculate the new cursor position:
+            pos1 = pos3 - e.clientX;
+            pos2 = pos4 - e.clientY;
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            // 计算拖拽元素的新位置
+            var newTop = elmnt.offsetTop - pos2;
+            // 新的左边界是200px，因此需要确保newLeft不小于200
+            var newLeft = Math.max(elmnt.offsetLeft - pos1, 250);
+
+            // 获取窗口的宽度和高度
+            var windowWidth = window.innerWidth;
+            var windowHeight = window.innerHeight;
+
+            // 获取拖拽元素的宽度和高度
+            var elmntWidth = elmnt.offsetWidth;
+            var elmntHeight = elmnt.offsetHeight;
+
+            // 设置拖拽元素的新位置，并确保它不会超出可视窗口的边界
+            newTop = Math.max(newTop, 0); // 不允许拖拽元素超出顶部边界
+            newLeft = Math.min(newLeft, windowWidth - elmntWidth); // 不允许拖拽元素超出右边界
+            newTop = Math.min(newTop, windowHeight - elmntHeight); // 不允许拖拽元素超出底部边界
+
+            // 应用新位置
+            elmnt.style.top = newTop + "px";
+            elmnt.style.left = newLeft + "px";
+        }
+
+        function closeDragElement() {
+            // stop moving when mouse button is released:
+            document.onmouseup = null;
+            document.onmousemove = null;
+        }
+    }
+
+    function closeAllmodule() {
+        console.log(111);
+        for (let i = 1; i <= ModuleNum; i++)
+            closeWindow(i);
+    }
+
+    // 置顶
+    function bringToFront(element) {
+        // 为了使当前模块出现在前面，我们需要设置一个足够高的 z-index
+        var highestZIndex = 100; // 你可以根据需要调整这个值
+        var currentModule = element.closest('.modu'); // 假设您的模块具有 '.module' 类
+
+        // 如果当前模块不存在，直接返回
+        if (!currentModule) return;
+        let topbutton = element.closest('.top-button');
+        if (currentModule.style.zIndex == 100) {
+            currentModule.style.zIndex = 1;
+            topbutton.style.background = '#cccccc';
+            return;
+        }
+        // 设置当前模块的 z-index
+        currentModule.style.zIndex = highestZIndex;
+        topbutton.style.background = '#efefef';
+    }
+</script>
+
+<!-- 各模块功能 -->
+<script>
+    // 计算ω
+    function calculateOmega() {
+        var startFreq = parseFloat(document.getElementById("startFreq").value);
+        var endFreq = parseFloat(document.getElementById("endFreq").value);
+        var step = parseFloat(document.getElementById("step").value);
+        var results = document.getElementById("results");
+        var omegaResults = "";
+
+        if (isNaN(startFreq) || isNaN(endFreq) || isNaN(step)) {
+            omegaResults = "Please enter valid numbers.";
+        } else {
+            if (step == 0) step = 1;
+            for (var freq = startFreq; freq <= endFreq; freq += step) {
+                var omega = 2 * Math.PI * freq;
+                let T = 1.0 / freq;
+                omegaResults += "f = " + freq + " Hz: ω = " + omega.toFixed(2) + " rad/s: T = " + T.toFixed(2) + " s<br>";
+            }
+        }
+
+        results.innerHTML = omegaResults;
+    }
+
+
+    // 进制转换
+    function convertNumber() {
+        // 获取用户输入的数值和进制
+        var numberInput = document.getElementById('numberInput').value;
+        var inputBase = parseInt(document.getElementById('inputBase').value, 10);
+        var outputBase = parseInt(document.getElementById('outputBase').value, 10);
+
+        // 尝试进行转换
+        try {
+            // 将输入转换为十进制
+            var decimal = parseInt(numberInput, inputBase);
+            if (isNaN(decimal)) {
+                throw new Error('Invalid input for base ' + inputBase);
+            }
+
+            // 从十进制转换到目标进制
+            var result = decimal.toString(outputBase);
+
+            // 显示结果
+            document.getElementById('result').innerText = `Converted number: ${result.toUpperCase()}`;
+        } catch (e) {
+            // 如果转换失败，显示错误信息
+            document.getElementById('result').innerText = e.message;
+        }
+    }
+
+    // bit Byte...转换
+    function convertData() {
+        var value = parseFloat(document.getElementById("dataValue").value);
+        var fromUnit = document.getElementById("fromUnit").value;
+        var toUnit = document.getElementById("toUnit").value;
+        var result = 0;
+
+        // 转换为字节
+        switch (fromUnit) {
+            case "bit": result = value / 8; break;
+            case "Byte": result = value; break;
+            case "KB": result = value * 1024; break;
+            case "MB": result = value * 1024 * 1024; break;
+            case "GB": result = value * 1024 * 1024 * 1024; break;
+        }
+
+        // 转换到目标单位
+        switch (toUnit) {
+            case "bit": result *= 8; break;
+            case "Byte": break; // 无需转换
+            case "KB": result /= 1024; break;
+            case "MB": result /= 1024 * 1024; break;
+            case "GB": result /= 1024 * 1024 * 1024; break;
+        }
+
+        document.getElementById("conversionResult").innerText = `转换结果: ${result.toFixed(2)} ${toUnit}`;
+    }
+    function performTwoPowerOperation() {
+        var value = parseFloat(document.getElementById("twoPowerInput").value);
+        var unit = document.getElementById("twoPowerUnit").value;
+        var operation = document.querySelector('input[name="twoPowerOperation"]:checked').value;
+        var result;
+
+        // 如果选择了单位，则根据单位调整值
+        if (unit !== "none") {
+            switch (unit) {
+                case "bit": break; // 位
+                case "byte": value *= 8; break; // 字节
+                case "kb": value *= 8 * 1024; break; // 千字节
+                case "mb": value *= 8 * 1024 * 1024; break; // 兆字节
+                case "gb": value *= 8 * 1024 * 1024 * 1024; break; // 吉字节
+            }
+        }
+
+        if (operation === "power") {
+            // 计算2的幂次方
+            result = Math.pow(2, value);
+        } else if (operation === "log") {
+            // 计算2的对数
+            result = Math.log2(value);
+        }
+        else if (operation === "log2") {
+            result = Math.log2(value / 8.0);
+        }
+
+        document.getElementById("twoPowerResult").innerText = `结果: ${result.toFixed(2)}`;
+    }
+
+
+    // 计算机
+    let currentInput = "";
+    let pendingOperation = "";
+
+    function clearDisplay() {
+        currentInput = "";
+        pendingOperation = "";
+        document.getElementById('display').value = "";
+    }
+
+    function appendDisplay(value) {
+        currentInput += value;
+        document.getElementById('display').value = currentInput;
+    }
+    function appendPi() {
+        currentInput += Math.PI.toString();
+        document.getElementById('display').value = currentInput;
+    }
+
+
+    function calculate(operation) {
+        if (operation === '=') {
+            try {
+                currentInput = currentInput.replace(/\^/g, '**');
+                currentInput = eval(currentInput).toString();
+            } catch {
+                currentInput = "Error";
+            }
+        } else if (['sin', 'cos', 'tan'].includes(operation)) {
+            currentInput = Math[operation](currentInput * Math.PI / 180).toString();
+        }
+        else if (operation === 'sqrt') {
+            currentInput = Math.sqrt(parseFloat(currentInput)).toString();
+        }
+        else {
+            currentInput += operation;
+        }
+        document.getElementById('display').value = currentInput;
+    }
+
+
+    // ADC
+    function calculateOutputVoltage() {
+        // 获取输入值
+        var vref = parseFloat(document.getElementById('vref').value);
+        var bit = parseInt(document.getElementById('bit').value);
+        var adcValue = parseInt(document.getElementById('adcValue').value);
+
+        // 计算输出电压
+        var maxValue = Math.pow(2, bit) - 1;
+        var outputVoltage = (adcValue / maxValue) * vref;
+
+        // 显示结果
+        document.getElementById('outputVoltage').innerHTML = 'Output Voltage: ' + outputVoltage.toFixed(2) + ' V';
+    }
+
+</script>
+
+
+
+
+</html>
