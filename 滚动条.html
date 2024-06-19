@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="scrollIndicator">
+        <div class="text">
+            <h2 id="textValue">11</h2>
+            <small>Page Scrolled</small>
+        </div>
+    </div>
+    <script>
+        const indicator = document.querySelector(".scrollIndicator");
+        const textValue = document.querySelector("#textValue");
+        window.addEventListener('load',()=>{
+            let maxHeight = document.documentElement.scrollHeight - window.innerHeight;
+            console.log(maxHeight);
+            window.addEventListener("scroll",()=>{
+                let scrollRatio = window.scrollY / maxHeight;
+                console.log(scrollRatio);
+
+                let angle = scrollRatio * 360;
+                let percent = Math.round(scrollRatio * 100);
+
+                indicator.style.background = `conic-gradient(from 0deg, #008eff 0%, #f00 ${angle}deg,#000 ${angle}deg)`;
+                textValue.innerHTML = percent + '<span>%</span>'
+            })
+        })
+        
+    </script>
+
+
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: consolas;
+        }
+        body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 400vh;
+            background: #222;
+        }
+        .scrollIndicator{
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            /* background-color: red; */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .scrollIndicator::before{
+            content: "";
+            background-color: purple;
+            position: absolute;
+            inset: 15px;
+            z-index: -1;
+
+        }
+    </style>
+</body>
+</html>
